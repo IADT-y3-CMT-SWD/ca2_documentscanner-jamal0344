@@ -10,7 +10,7 @@ def nothing(x):
 
 ########################################################
 webCamFeed = False
-pathImage = "Images\\image004.jpg"
+pathImage = "Images\\image004.jpg"#img path
 cap = cv2.VideoCapture(0)
 cap.set(10,160)
 heightImg = 640
@@ -76,14 +76,14 @@ def drawRectangle(img,biggest,thickness):
     return img
 
 initializeTrackbars (125)
-count=0
+count=0 #file name 
 #imgBlank = 
 while True:
     #input is either webcam or image
     if webCamFeed:
         success, img = cap.read()
     else:
-        img = cv2.imread(pathImage)
+        img = cv2.imread(pathImage) #img  orginall
 
 
 
@@ -98,14 +98,14 @@ while True:
     kernel = np.ones((5, 5))
     imgDial = cv2.dilate(imgCanny, kernel, iterations=2) #APPLY DILATION
     imgThreshold = cv2.erode(imgDial, kernel, iterations=1 ) #APPLY EROSION
-    imgContours =img.copy()
+    imgContours =img.copy()#copy org img
     #imgFinal = imgCanny
 
     contours, hierarchy = cv2.findContours(imgThreshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(imgThreshold, contours, -1,(0,255,0), 10) # draw contours
     biggest, area=biggestContour(contours) # biggest contours
     newpoints=reorder(biggest) # reoreder points
-    drawrec=drawRectangle(imgContours,newpoints,10)
+    drawrec=drawRectangle(imgContours,newpoints,10) # draw rec on contours
 
 
     pts1 = np.float32(newpoints)
@@ -117,14 +117,14 @@ while True:
 
 
 
-    cv2.imshow("1. Original", img)
-    cv2.imshow("2. Grayscale", imgGray)
-    cv2.imshow("3. Blur", imgBlur)
-    cv2.imshow("4. Canny", imgCanny)
-    cv2.imshow("5. Dilate", imgDial)
-    cv2.imshow("6. Treshold", imgThreshold)
-    cv2.imshow("7. imgContours", imgContours)
-    cv2.imshow("8. imgWarpColored", imgWarpColored)
+   # cv2.imshow("1. Original", img)
+   # cv2.imshow("2. Grayscale", imgGray)
+   # cv2.imshow("3. Blur", imgBlur)
+    #cv2.imshow("4. Canny", imgCanny)
+   # cv2.imshow("5. Dilate", imgDial)
+    #cv2.imshow("6. Treshold", imgThreshold)
+    cv2.imshow("7. imgContours", imgContours) # draw rec 
+    cv2.imshow("8. imgWarpColored", imgWarpColored) # warp img 
 
     #Press x on keybord to exit
     #Close and break the loop after pressing "X" key
@@ -133,10 +133,10 @@ while True:
 
     #save image when 's' key is pressed
     if cv2.waitKey(1) & 0XFF == ord('s'):
-        print("saving")
+        print("saving") #print save
         cv2.imwrite("Scanned/myIamge"+str(count)+".jpg", imgWarpColored) # scanned waped img
-        cv2.waitKey(300)
-        count +=1 # 
+        cv2.waitKey(300) #pause 3 mlisec
+        count +=1 # save more then 1 new name 
             
 #when everything done release
 # the video capture object
