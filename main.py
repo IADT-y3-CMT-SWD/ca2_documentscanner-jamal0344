@@ -1,4 +1,4 @@
-from asyncio import threads
+
 import cv2
 import numpy as np
 #from utils import biggestContour, drawRectangle, reorder, valTrackbars
@@ -10,7 +10,7 @@ def nothing(x):
 
 ########################################################
 webCamFeed = False
-pathImage = "Images\\images004.jpg"
+pathImage = "Images\\image004.jpg"
 cap = cv2.VideoCapture(0)
 cap.set(10,160)
 heightImg = 640
@@ -24,6 +24,8 @@ def initializeTrackbars(intialTracbarVal=125):
     cv2.resizeWindow("Trackbars", 360, 240)
     cv2.createTrackbar("Threshold1", "Trackbars", intialTracbarVal,255, nothing)
     cv2.createTrackbar("Threshold2", "Trackbars", intialTracbarVal, 255, nothing)
+
+
 def valTrackbars():
     Threshold1 = cv2.getTrackbarPos("Threshold1", "Trackbars")
     Threshold2 = cv2.getTrackbarPos("Threshold2", "Trackbars")
@@ -97,19 +99,19 @@ while True:
     imgDial = cv2.dilate(imgCanny, kernel, iterations=2) #APPLY DILATION
     imgThreshold = cv2.erode(imgDial, kernel, iterations=1 ) #APPLY EROSION
     imgContours =img.copy()
-    imgFinal = imgCanny
+    #imgFinal = imgCanny
 
     contours, hierarchy = cv2.findContours(imgThreshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(imgThreshold, contours, -1,(0,255,0), 10) # draw contours
     biggest, area=biggestContour(contours) # biggest contours
     newpoints=reorder(biggest) # reoreder points
-    #drawrec=drawRectangle()
+    drawrec=drawRectangle(imgContours,newpoints,10)
 
 
     pts1 = np.float32(newpoints)
     pts2 = np.float32([[0, 0], [widthImg, 0], [0, heightImg], [widthImg, heightImg]])
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
-    imgWarpColored = cv2.warpPerspective(img, matrix, (widthImg, heightImg))
+    imgWarpColored = cv2.warpPerspective(imgContours, matrix, (widthImg, heightImg))
 
 
 
@@ -132,9 +134,9 @@ while True:
     #save image when 's' key is pressed
     if cv2.waitKey(1) & 0XFF == ord('s'):
         print("saving")
-        cv2.imwrite("Scanned/myIamge"+str(count)+".jpg", imgFinal)
+        cv2.imwrite("Scanned/myIamge"+str(count)+".jpg", imgWarpColored) # scanned waped img
         cv2.waitKey(300)
-        count +=1
+        count +=1 # 
             
 #when everything done release
 # the video capture object
