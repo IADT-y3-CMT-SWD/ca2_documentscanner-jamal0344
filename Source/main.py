@@ -10,7 +10,7 @@ def nothing(x):
 
 ########################################################
 webCamFeed = False
-pathImage = "Images\\image004.jpg"#img path
+pathImage = "Source\\Images\\image004.jpg"#img path
 cap = cv2.VideoCapture(0)
 cap.set(10,160)
 heightImg = 640
@@ -138,7 +138,7 @@ while True:
     #save image when 's' key is pressed
     if cv2.waitKey(1) & 0XFF == ord('s'): #if S key press = save 
         print("saving") #print save
-        cv2.imwrite("Scanned/myIamge"+str(count)+".jpg", imgWarpColored) # scanned waped img
+        cv2.imwrite("Source/Scanned/myIamge"+str(count)+".jpg", imgWarpColored) # scanned waped img
         cv2.waitKey(300) #pause 3 mlisec
         count +=1 # save more then 1 new name 
             
