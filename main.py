@@ -107,22 +107,26 @@ while True:
     newpoints=reposition(biggest) # i renamed = reposition rec points 
     drawrec=drawRectangle(imgContours,newpoints,10) # draw rec on contours 10 thickness for line 
 
-
-    pts1 = np.float32(newpoints)
-    pts2 = np.float32([[0, 0], [widthImg, 0], [0, heightImg], [widthImg, heightImg]])
+    #list of points of the biggest region as floats
+    pts1 = np.float32(newpoints) # prepare 4 points from biggest are for transformation
+    #how transformed image should be redered in output pixel coordinates
+    pts2 = np.float32([[0, 0], [widthImg, 0], [0, heightImg], [widthImg, heightImg]])#prepare points for warp
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
+    #apply the matrix to the transform
     imgWarpColored = cv2.warpPerspective(imgContours, matrix, (widthImg, heightImg))
+  
+  
+  
+  
+    '''
+    cv2.imshow("1. Original", img)
+    cv2.imshow("2. Grayscale", imgGray)
+    cv2.imshow("3. Blur", imgBlur)
+    cv2.imshow("4. Canny", imgCanny)
+    cv2.imshow("5. Dilate", imgDial)
+    cv2.imshow("6. Treshold", imgThreshold)
 
-
-
-
-
-   # cv2.imshow("1. Original", img)
-   # cv2.imshow("2. Grayscale", imgGray)
-   # cv2.imshow("3. Blur", imgBlur)
-    #cv2.imshow("4. Canny", imgCanny)
-   # cv2.imshow("5. Dilate", imgDial)
-    #cv2.imshow("6. Treshold", imgThreshold)
+    '''
     cv2.imshow("7. imgContours", imgContours) # draw rec 
     cv2.imshow("8. imgWarpColored", imgWarpColored) # warp img 
 
