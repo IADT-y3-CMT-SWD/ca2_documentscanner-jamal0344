@@ -54,7 +54,7 @@ def biggestContour(contours):
     return biggest,max_area
  
 #reordering points in order to warp image
-def reorder(myPoints):
+def reposition(myPoints):
     myPoints = myPoints.reshape((4, 2))
     myPointsNew = np.zeros((4, 1, 2), dtype=np.int32)
     add = myPoints.sum(1)
@@ -95,7 +95,7 @@ while True:
     imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1) #ADD GAUSSIAN BLUR
     thres=valTrackbars() #get track bar vaalues for thresholds
     imgCanny = cv2.Canny(imgBlur,thres[0],thres[1])#apply canny blur
-    kernel = np.ones((5, 5))
+    kernel = np.ones((5, 5)) # reorder of the new array[list]
     imgDial = cv2.dilate(imgCanny, kernel, iterations=2) #APPLY DILATION
     imgThreshold = cv2.erode(imgDial, kernel, iterations=1 ) #APPLY EROSION
     imgContours =img.copy()#copy org img
@@ -104,8 +104,8 @@ while True:
     contours, hierarchy = cv2.findContours(imgThreshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(imgThreshold, contours, -1,(0,255,0), 10) # draw contours
     biggest, area=biggestContour(contours) # biggest contours
-    newpoints=reorder(biggest) # reoreder points
-    drawrec=drawRectangle(imgContours,newpoints,10) # draw rec on contours
+    newpoints=reposition(biggest) # i renamed = reposition rec points 
+    drawrec=drawRectangle(imgContours,newpoints,10) # draw rec on contours 10 thickness for line 
 
 
     pts1 = np.float32(newpoints)
@@ -128,11 +128,11 @@ while True:
 
     #Press x on keybord to exit
     #Close and break the loop after pressing "X" key
-    if cv2.waitKey(1) & 0XFF == ord('x'):
+    if cv2.waitKey(1) & 0XFF == ord('x'): # destroyAllWindows X key
         break # exit infinite loop
 
     #save image when 's' key is pressed
-    if cv2.waitKey(1) & 0XFF == ord('s'):
+    if cv2.waitKey(1) & 0XFF == ord('s'): #if S key press = save 
         print("saving") #print save
         cv2.imwrite("Scanned/myIamge"+str(count)+".jpg", imgWarpColored) # scanned waped img
         cv2.waitKey(300) #pause 3 mlisec
